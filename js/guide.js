@@ -29,8 +29,10 @@
       ${bar(38, 56, 160, "il-ink")}${bar(38, 70, 140, "il-soft")}${bar(38, 84, 168, "il-soft")}${bar(38, 98, 120, "il-soft")}${bar(38, 112, 150, "il-soft")}`),
     claude: svg(`${card(14, 30, 92, 90)}${bar(26, 46, 64, "il-ink")}${bar(26, 58, 50, "il-ink")}<rect class="il-opt" x="26" y="74" width="68" height="12" rx="3"/><rect class="il-opt" x="26" y="92" width="68" height="12" rx="3"/>
       <path class="il-arrow" d="M112 75 h26 m-8 -7 l8 7 l-8 7"/>
-      <rect class="il-claude-bg" x="146" y="26" width="82" height="62" rx="12"/><text class="il-claude" x="187" y="64">✦</text>
+      <rect class="il-claude-bg" x="146" y="26" width="82" height="62" rx="12"/><image href="assets/brand/claude-icon.png" x="167" y="37" width="40" height="40" preserveAspectRatio="xMidYMid meet"/>
       <rect class="il-key" x="150" y="100" width="74" height="26" rx="6"/><text class="il-keytxt" x="187" y="118">Ctrl + V</text>`),
+    learnc: svg(`${card(20, 14, 200, 122)}<image href="assets/brand/claude-icon.png" x="34" y="28" width="30" height="30"/>${bar(74, 34, 120, "il-ink")}${bar(74, 46, 90, "il-soft")}
+      ${[0, 1, 2, 3].map((i) => `<circle class="${i < 2 ? "il-ok" : "il-soft"}" cx="44" cy="${76 + i * 15}" r="5"/>${bar(56, 72 + i * 15, 130 - i * 14, "il-soft")}`).join("")}`),
     remember: svg(`${card(46, 16, 150, 118)}<rect class="il-gold" x="46" y="16" width="5" height="118" rx="2"/>
       ${bar(64, 36, 100, "il-ink")}${bar(64, 52, 116, "il-soft")}${bar(64, 66, 90, "il-soft")}${bar(64, 80, 108, "il-soft")}
       <g transform="translate(150 86) rotate(35)"><rect class="il-acc" x="0" y="0" width="12" height="52" rx="3"/><path class="il-gold" d="M0 52 l6 12 l6 -12 z"/></g>`),
@@ -56,7 +58,8 @@
     ["pick", "Pick a topic", "Open <b>PYQ Practice</b>, choose a subject, tick one topic or several, and press <b>Start</b>."],
     ["answer", "Answer, then check", "Tap an option (or type the number for numerical questions) and press <b>Check answer</b>. Green is correct; the right answer always lights up."],
     ["solution", "See the full solution", "Press <b>Show answer</b> any time for the answer and a step-by-step explanation."],
-    ["claude", "Stuck? Ask Claude", "Press <b>✦ Ask Claude</b>. A screenshot of the question is copied and Claude opens with the question already typed. Press <b>Ctrl + V</b> (on a phone: long-press → Paste) to attach it."],
+    ["claude", "Stuck? Ask Claude", "Press <b>Ask Claude</b>. A screenshot of the question is copied and Claude opens with the question already typed. Press <b>Ctrl + V</b> (on a phone: long-press → Paste) to attach it."],
+    ["learnc", "Learn with Claude", "New topic? Open <b>Learn with Claude</b>: install Claude, pick a topic and follow five steps. Claude teaches, quizzes you and walks through real PYQs."],
     ["remember", "Keep the idea", "Press <b>✎</b> to write down the trick or concept you want to remember. All your notes live in <b>Notebook</b>."],
     ["end", "End the session", "Press <b>End session</b>. The doors close and open on your results: accuracy, total time, time per question and what to revise."],
     ["test", "Take a timed test", "In <b>Timed Tests</b>, choose chapters and 1, 2 or 3 hours. Questions mix like real GATE (30% easy, 50% moderate, 20% hard) with negative marking and a clock on every question."],
@@ -67,7 +70,7 @@
 
   function guide() {
     GH.paint(`
-      <header class="page-head calm-head" style="text-align:center"><p class="eyebrow">How it works</p><h1 class="title">GateHub in ten small steps</h1>
+      <header class="page-head calm-head" style="text-align:center"><p class="eyebrow">How it works</p><h1 class="title">GateHub in eleven small steps</h1>
         <p class="lede" style="margin:0 auto">Everything you need to know, one picture at a time.</p></header>
       <div class="guide">
         ${STEPS.map(([k, t, d], i) => `<article class="g-step panel">

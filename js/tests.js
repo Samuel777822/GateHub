@@ -506,7 +506,7 @@
             : `<div class="nat ${p.r === "c" ? "right" : p.r === "w" ? "wrong" : ""}"><input type="text" disabled value="${esc(a.nat || "")}" placeholder="Not answered"><span class="small">Your answer</span></div>`}
           <div class="small no-shot" style="margin-top:6px">${myAns ? `Your answer: <b>${esc(myAns)}</b>` : "You didn't answer this question."} · Time spent: ${fmtMin(T.tspent[q.id] || 0)}</div>
           <div class="q-actions no-shot">
-            <button class="btn claude" id="ask" title="Copy a screenshot and open a new Claude chat">✦ Ask Claude to explain</button>
+            <button class="btn claude" id="ask" title="Copy a screenshot and open a new Claude chat"><img class="claude-logo" src="assets/brand/claude-icon.png" alt=""> Ask Claude to explain</button>
             <span class="spacer"></span>
             <a class="btn ghost sm" href="${i > 0 ? href(i - 1) : "#"}" ${i > 0 ? "" : 'style="opacity:.4;pointer-events:none"'}>◀ Prev</a>
             <a class="btn sm" href="${i < T.qids.length - 1 ? href(i + 1) : `#/test/${id}/result`}">${i < T.qids.length - 1 ? "Next ▶" : "Back to result"}</a>

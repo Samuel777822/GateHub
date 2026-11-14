@@ -945,3 +945,36 @@ body { font-synthesis-weight: none; }
   .ic-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) { .nav, .nav a { flex: none; } .side { order: 0; } }
+
+/* Claude logo + Learn with Claude */
+.claude-logo { width: 1.15em; height: 1.15em; border-radius: 24%; vertical-align: -.22em; flex: none; }
+.claude-logo.big { width: 1.1em; height: 1.1em; vertical-align: -.12em; margin-right: 6px; }
+.nav-ic .claude-logo { width: 18px; height: 18px; vertical-align: middle; }
+.claude-seal { background: transparent !important; overflow: hidden; }
+.claude-seal .claude-logo { width: 100%; height: 100%; border-radius: 50%; }
+.btn.claude, .claude-btn { color: var(--claude); border-color: color-mix(in srgb, var(--claude) 45%, transparent); background: var(--paper-2); }
+.btn.claude:hover, .claude-btn:hover { background: color-mix(in srgb, var(--claude) 9%, var(--paper-2)); border-color: var(--claude); }
+.learn-head .title { display: flex; align-items: center; flex-wrap: wrap; }
+.step-badge { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; flex: none; font: 700 .9rem var(--sans); color: var(--on-accent); background: var(--accent); }
+.install-claude.done { opacity: .75; }
+.install-claude.done .step-badge { background: var(--ok); }
+.claude-apps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.claude-app { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--paper); color: var(--ink); text-decoration: none; transition: border-color .15s; }
+.claude-app:hover { border-color: var(--claude); }
+.claude-app .claude-logo { width: 32px; height: 32px; border-radius: 8px; }
+.claude-app b { display: block; font-size: .92rem; }
+.claude-app small { color: var(--ink-3); font-size: .78rem; }
+.learn-pick { margin-top: 16px; }
+.pick-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.pick-row select { width: 100%; }
+.learn-session { margin-top: 16px; }
+.learn-steps { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.ls { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); }
+.ls-n { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font: 700 .82rem var(--sans); border: 1.5px solid var(--line-2); color: var(--ink-2); }
+.ls.done { border-color: var(--ok-line); background: var(--ok-bg); }
+.ls.done .ls-n { background: var(--ok); border-color: var(--ok); color: var(--paper-2); }
+.ls-text b { display: block; font-family: var(--serif); font-size: 1.05rem; }
+.ls-text span { font-size: .86rem; color: var(--ink-3); }
+.learn-foot { margin-top: 16px; }
+@media (max-width: 980px) { .claude-apps { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pick-row { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .ls { grid-template-columns: 28px minmax(0, 1fr); } .ls .btn { grid-column: 1 / -1; } .claude-apps { grid-template-columns: 1fr 1fr; } }

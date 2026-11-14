@@ -1,7 +1,7 @@
 // GateHub service worker — lets the app open even when the local server is off.
-const VERSION = "gh-v10";
+const VERSION = "gh-v11";
 const SHELL = [
-  "./", "index.html", "config.js", "css/app.css", "js/app.js", "js/fx.js", "js/content.js", "js/tests.js", "js/practice.js", "js/guide.js",
+  "./", "index.html", "config.js", "css/app.css", "js/app.js", "js/fx.js", "js/content.js", "js/tests.js", "js/practice.js", "js/guide.js", "js/learn.js", "assets/brand/claude-icon.png",
   "manifest.webmanifest", "assets/emblem.svg", "assets/wallpaper.png",
   "assets/techgates-lockup-gold.svg", "assets/techgates-lockup-ink.svg", "assets/techgates-mark-gold.svg", "assets/fonts/GateHubDisplay.woff2",
   "assets/icons/icon-192.png", "assets/icons/icon-512.png", "assets/icons/icon-32.png",

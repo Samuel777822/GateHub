@@ -365,6 +365,7 @@
           <div class="row" style="margin-top:14px">
             <a class="btn gold" href="${runHref("t", firstUnfinishedTopic(s).key, firstOpenIdx(firstUnfinishedTopic(s).q))}">Practice next topic</a>
             <a class="btn" href="#/practice?s=${sid}">Practise by topic</a>
+            <a class="btn claude" href="#/learn?s=${sid}"><img class="claude-logo" src="assets/brand/claude-icon.png" alt=""> Learn with Claude</a>
           </div>
         </div>
         ${ringPct(st.pct, 150, st.pct.toFixed(0) + "%", `${st.done}/${st.total} SOLVED`)}
@@ -719,12 +720,12 @@
       <div class="rule"><span></span>❦<span></span></div>
       <div class="grid g2" style="margin-bottom:20px">
         ${pw ? `<div class="panel"><div class="acct"><span class="seal">PW</span><div style="flex:1"><h3>GATE Wallah</h3><div class="small">Your batches, lectures and DPPs</div></div><a class="btn gold" href="${esc(pw.url)}" target="_blank" rel="noopener">Open ↗</a></div></div>` : ""}
-        ${cl ? `<div class="panel"><div class="acct"><span class="seal" style="background:var(--claude)">✦</span><div style="flex:1"><h3>Claude</h3><div class="small">Your tutor for doubts and derivations</div></div><a class="btn gold" href="${esc(cl.url)}" target="_blank" rel="noopener">Open ↗</a></div></div>` : ""}
+        ${cl ? `<div class="panel"><div class="acct"><span class="seal claude-seal"><img class="claude-logo" src="assets/brand/claude-icon.png" alt=""></span><div style="flex:1"><h3>Claude</h3><div class="small">Your tutor for doubts and derivations</div></div><a class="btn gold" href="${esc(cl.url)}" target="_blank" rel="noopener">Open ↗</a></div></div>` : ""}
       </div>
       <div class="panel ask" style="margin-bottom:20px">
         <h2 class="sec">Ask Claude a Doubt</h2>
         <textarea id="ask-txt" placeholder="e.g. Why is every LL(1) grammar also LALR(1)? Give a counter-example for the converse."></textarea>
-        <div class="row" style="margin-top:10px"><span class="small">Opens a new chat in Claude with your question already typed. On any PYQ, use ✦ Ask Claude to send the question with a screenshot.</span><span class="spacer"></span><button class="btn claude" id="ask-go">✦ Ask Claude</button></div>
+        <div class="row" style="margin-top:10px"><span class="small">Opens a new chat in Claude with your question already typed. On any PYQ, use Ask Claude to send the question with a screenshot.</span><span class="spacer"></span><button class="btn claude" id="ask-go"><img class="claude-logo" src="assets/brand/claude-icon.png" alt=""> Ask Claude</button></div>
       </div>
       <div class="panel"><h2 class="sec">More Resources</h2>
         <div class="launch">${others.map((l) => `<a href="${esc(l.url)}" target="_blank" rel="noopener"><b>${esc(l.title)}</b><span>${esc(l.sub || "")}</span></a>`).join("")}</div></div>`);

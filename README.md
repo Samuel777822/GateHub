@@ -17,6 +17,7 @@
 - **Every GATE CSE PYQ, 1987–2026.** 3,692 questions sorted into 15 subjects, 67 chapters and 219 topics. Each one has its answer and a worked explanation.
 - **Calm practice sessions.** Pick one topic or several, answer at your own pace, then end the session. You get your accuracy, total time, time per question and a short analysis.
 - **Timed GATE-style tests.** 1 hour / 22 questions, 2 hours / 32 questions or 3 hours / 65 questions. Questions follow GATE's usual mix of about 30% easy, 50% moderate and 20% hard, with negative marking on MCQs, a question palette and a per-question clock. Results include analysis by chapter, difficulty and time.
+- **Learn with Claude.** Pick any topic and follow five guided steps (understand it, GATE tricks, quiz, real PYQs, revision notes), each opening Claude with a prompt made for that topic. Install Claude first: [Android](https://play.google.com/store/apps/details?id=com.anthropic.claude) · [iPhone](https://apps.apple.com/app/claude-by-anthropic/id6473753684) · [Windows/Mac](https://claude.ai/download) · [web](https://claude.ai).
 - **Ask Claude on any question.** One click copies a screenshot of the question and opens a new Claude chat with the question already typed in.
 - **A lecture plan for every subject.** Start with the MIT, Stanford or Harvard course, then use NPTEL only for the GATE topics it doesn't cover. Exact lecture numbers are given for both.
 - **Notebook.** Press ✎ on any question to write down the idea you want to remember. All your notes live in one searchable place.
@@ -83,3 +84,4 @@ To install it as an app, open GateHub in Chrome and choose **⋮ → Cast, save,
 - **Libraries:** [KaTeX](https://katex.org), [marked](https://marked.js.org), [DOMPurify](https://github.com/cure53/DOMPurify) and [html-to-image](https://github.com/bubkoo/html-to-image).
 - **Fonts:** GateHub Display (our own); Source Serif 4, Source Sans 3 and JetBrains Mono from Google Fonts.
 - **Reviews** are delivered by [Web3Forms](https://web3forms.com).
+- **Claude** and the Claude logo are trademarks of [Anthropic](https://www.anthropic.com). GateHub links to Claude; it isn't made by Anthropic.

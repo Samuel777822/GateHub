@@ -189,7 +189,7 @@
           <div class="q-actions no-shot">
             ${selfGraded ? "" : `<button class="btn primary" id="check">Check answer</button>`}
             <button class="btn" id="reveal">Show answer</button>
-            <button class="btn ghost claude-ghost" id="ask" title="Copy a screenshot and open Claude (C)">✦ Ask Claude</button>
+            <button class="btn ghost claude-ghost" id="ask" title="Copy a screenshot and open Claude (C)"><img class="claude-logo" src="assets/brand/claude-icon.png" alt=""> Ask Claude</button>
             <span id="verdict"></span>
           </div>
           <div class="q-ex no-shot" id="q-ex"><div><div class="ex-inner">
