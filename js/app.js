@@ -357,7 +357,7 @@
       const p = countdownParts();
       for (const [k, v] of [["d", p.d], ["h", pad(p.h)], ["m", pad(p.m)], ["s", pad(p.s)]]) {
         const el = $("#cd-" + k, view);
-        if (el && el.textContent !== String(v)) el.textContent = v;
+        if (el && el.textContent !== String(v)) { el.textContent = v; el.classList.remove("flip"); void el.offsetWidth; el.classList.add("flip"); }
       }
     }, 1000);
     return () => clearInterval(tick);

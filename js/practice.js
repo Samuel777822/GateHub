@@ -379,6 +379,7 @@
           </div>
         </section>
       </div>`);
+    GH.previewMath(GH.view);
     const onClick = (e) => {
       const o = e.target.closest("[data-open]");
       if (o) { try { sessionStorage.setItem("gh.list.one", JSON.stringify({ ids: [o.dataset.open], label: "Review question", back: `#/session/${id}` })); } catch {} location.hash = GH.runHref("f", "one", 0); return; }
