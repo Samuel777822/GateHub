@@ -776,7 +776,7 @@
     const others = (C.links || []).filter((l) => !["pw", "claude"].includes(l.key));
     paint(`
       <header class="page-head"><p class="eyebrow">The Library</p><h1 class="title">Your Accounts &amp; Tools</h1>
-      <p class="lede">Links open in your normal Chrome window, so you stay signed in to GATE Wallah and Claude. Sign in once and Chrome remembers you.</p></header>
+      <p class="lede">Links open in a new tab of your browser, so you stay signed in to GATE Wallah and Claude. Sign in once and your browser remembers you.</p></header>
       <div class="rule"><span></span>❦<span></span></div>
       <div class="grid g2" style="margin-bottom:20px">
         ${pw ? `<div class="panel"><div class="acct"><span class="seal">PW</span><div style="flex:1"><h3>GATE Wallah</h3><div class="small">Opens your PW study page with your batches, lectures and DPPs. Signed out? PW asks you to log in first, then takes you there.</div></div><a class="btn gold" href="${esc(pw.url)}" target="_blank" rel="noopener">Open my batches ↗</a></div></div>` : ""}
@@ -805,7 +805,7 @@
     const subjRows = BANK.subjects.map((s) => { const st = stats(s.ids); return `<div class="subj-mini"><span class="nm">${esc(s.name)}</span><span class="pc">${st.done}/${st.total} · ${st.acc == null ? "—" : Math.round(st.acc) + "%"}</span>${bar(st.pct)}</div>`; }).join("");
     paint(`
       <header class="page-head"><p class="eyebrow">The Records</p><h1 class="title">Examinations &amp; Progress</h1>
-      <p class="lede">Log your mock test scores and back up your progress. Everything is stored on this laptop.</p></header>
+      <p class="lede">Log your mock test scores and back up your progress. Everything is stored on this device.</p></header>
       <div class="rule"><span></span>❦<span></span></div>
       <div class="grid g2">
         <div class="panel">
