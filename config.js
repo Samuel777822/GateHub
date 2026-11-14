@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────
 window.GATEHUB_CONFIG = {
   name: "",                             // your name for the greeting (blank = "Scholar")
-  examDate: "2028-02-05T09:30:00",      // GATE 2028 — not announced yet (checked Nov 2026); first Saturday of Feb is the planning estimate
+  gateYear: null,                       // default GATE year (null = ask each user; GATE is always in February)
   dailyGoalHours: 6,
   focusMinutes: 50,
   breakMinutes: 10,

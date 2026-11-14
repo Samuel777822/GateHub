@@ -64,7 +64,52 @@
     S.att[id] = { r, t: Date.now(), n: ((prev && prev.n) || 0) + (r === "s" ? 0 : 1) };
     save();
   }
-  const examDate = new Date(C.examDate || "2027-02-06T09:30:00");
+  // GATE is always held in February. Users only pick the year.
+  // Known official start dates; otherwise the first Saturday of February.
+  const GATE_KNOWN = { 2027: "2027-02-06T09:30:00" };   // IIT Madras: 6, 7, 13, 14, 20, 21 Feb 2027
+  const firstSatOfFeb = (y) => { const d = new Date(y, 1, 1, 9, 30); d.setDate(1 + ((6 - d.getDay() + 7) % 7)); return d; };
+  const gateDateFor = (y) => (GATE_KNOWN[y] ? new Date(GATE_KNOWN[y]) : firstSatOfFeb(y));
+  const defaultYear = () => { const n = new Date(); return n.getMonth() >= 2 ? n.getFullYear() + 1 : n.getFullYear(); };
+  const gateYear = () => S.gateYear || C.gateYear || defaultYear();
+  let examDate = gateDateFor(gateYear());
+  function setGateYear(y) { S.gateYear = y; examDate = gateDateFor(y); save(); setSideDays(); }
+  function yearPicker(first) {
+    const now = new Date(), start = now > gateDateFor(now.getFullYear()) ? now.getFullYear() + 1 : now.getFullYear();
+    const years = [0, 1, 2, 3].map((i) => start + i);
+    const wrap = document.createElement("div");
+    wrap.className = "modal-wrap";
+    wrap.innerHTML = `<div class="modal year-modal" role="dialog" aria-modal="true" aria-labelledby="yr-t">
+      <p class="eyebrow">${first ? "Welcome to GateHub" : "Your exam"}</p>
+      <h2 class="modal-title" id="yr-t">Which GATE are you writing?</h2>
+      <p class="small" style="margin:0 0 16px">GATE is held every February. Pick your year and we'll count down to it.</p>
+      <div class="year-grid">${years.map((y) => `<button class="year-btn ${S.gateYear === y ? "on" : ""}" data-y="${y}"><b>${y}</b><span>February ${y}</span></button>`).join("")}</div>
+      <form class="year-other" id="yr-form" novalidate>
+        <label for="yr-in" class="small">Another year</label>
+        <input id="yr-in" type="number" inputmode="numeric" min="${start}" max="2100" step="1" placeholder="e.g. ${start + 5}" value="${S.gateYear && !years.includes(S.gateYear) ? S.gateYear : ""}">
+        <button class="btn sm" type="submit">Set</button>
+      </form>
+      <div class="field-err" id="yr-err"></div>
+      ${first ? `<button class="btn ghost sm" id="yr-skip" style="margin-top:6px">Decide later</button>` : ""}
+    </div>`;
+    document.body.append(wrap);
+    const close = () => wrap.remove();
+    const choose = (y) => { setGateYear(y); close(); route(); FX.toast(`<b>Counting down to GATE ${y}.</b> Change it any time from the home page.`); };
+    wrap.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-y]");
+      if (b) choose(+b.dataset.y);
+      else if (e.target === wrap || e.target.id === "yr-skip") { if (first) { S.gateYear = S.gateYear || defaultYear(); save(); } close(); }
+    });
+    wrap.querySelector("#yr-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const v = wrap.querySelector("#yr-in").value.trim(), y = +v;
+      const err = wrap.querySelector("#yr-err");
+      if (!/^\d{4}$/.test(v)) { err.textContent = "Type a four-digit year, like 2031."; return; }
+      if (y < start) { err.textContent = `GATE ${y} has already happened. Pick ${start} or later.`; return; }
+      if (y > 2100) { err.textContent = "That's a little far ahead. Pick a year before 2100."; return; }
+      choose(y);
+    });
+    wrap.querySelector("#yr-in").addEventListener("input", () => { wrap.querySelector("#yr-err").textContent = ""; });
+  }
 
   // ═══ Rich text (HTML / Markdown + KaTeX) ════════════════
   function mdToHtml(src) {
@@ -158,7 +203,10 @@
     const diff = Math.max(0, examDate - new Date());
     return { d: Math.floor(diff / 864e5), h: Math.floor(diff / 36e5) % 24, m: Math.floor(diff / 6e4) % 60, s: Math.floor(diff / 1e3) % 60 };
   }
-  function setSideDays() { $("#side-days").textContent = countdownParts().d; }
+  function setSideDays() {
+    $("#side-days").textContent = countdownParts().d;
+    const l = $("#side-days-label"); if (l) l.textContent = `days to GATE ${gateYear()}`;
+  }
 
   // ═══ HOME ═══════════════════════════════════════════════
   function atrium() {
@@ -195,7 +243,7 @@
             <div><b id="cd-m">${pad(cd.m)}</b><small>minutes</small></div>
             <div><b id="cd-s">${pad(cd.s)}</b><small>seconds</small></div>
           </div>
-          <div class="cd-until">until GATE ${examYear} · ${examDate.toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}</div>
+          <div class="cd-until">until GATE ${examYear} · February ${examYear}${GATE_KNOWN[examYear] ? "" : " (tentative)"} · <button class="link-btn cd-change" id="cd-change">change year</button></div>
         </div>
       </section>
       <blockquote class="home-quote">“${esc(qt)}”<cite>${esc(qa)}</cite></blockquote>
@@ -234,6 +282,7 @@
     const qodBtn = $("[data-qod]", view);
     if (qodBtn) qodBtn.addEventListener("click", () => { try { sessionStorage.setItem("gh.list.qod", JSON.stringify({ ids: [qodBtn.dataset.qod], label: "Question of the day", back: "#/" })); } catch {} });
 
+    const chg = $("#cd-change", view); if (chg) chg.addEventListener("click", () => yearPicker(false));
     const tick = setInterval(() => {
       const p = countdownParts();
       for (const [k, v] of [["d", p.d], ["h", pad(p.h)], ["m", pad(p.m)], ["s", pad(p.s)]]) {
@@ -790,7 +839,7 @@
     S, save, QBY, TOPIC, SUBJ, CHAP, tKey, esc, pad, dayKey, $, $$, LET,
     get BANK() { return BANK; }, view,
     stats, record, rich, typeset, plain, strip, answerText, grade, askClaude,
-    paint, bar, accPill, ringPct, subjName, runHref, examDate,
+    paint, bar, accPill, ringPct, subjName, runHref, get examDate() { return examDate; }, yearPicker,
     resolveList, firstOpenIdx, topicHref, firstUnfinishedTopic, fmtTopic: (q) => TOPIC[tKey(q.s, q.c, q.tp)],
     addRoute: (re, fn, nav) => extraRoutes.push([re, fn, nav]),
     rerender: () => route()
@@ -807,6 +856,8 @@
     addEventListener("hashchange", route);
     addEventListener("resize", () => setNav(($("#nav a.active") || {}).dataset ? $("#nav a.active").dataset.nav : ""));
     route();
+    const sc = $(".side-count"); if (sc) { sc.style.cursor = "pointer"; sc.title = "Change your GATE year"; sc.addEventListener("click", () => yearPicker(false)); }
+    if (!S.gateYear) setTimeout(() => yearPicker(true), document.body.classList.contains("intro-playing") ? 3300 : 400);
     if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("sw.js").catch(() => {});
   }
   boot();
