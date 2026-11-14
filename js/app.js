@@ -277,7 +277,21 @@
               : `<p class="small" style="margin:0">Solve a few PYQs and the topics that need more work will show up here.</p>`}
           </div>
         </div>
+      </section>
+      <section class="panel install-card" id="install-card">
+        <div class="ic-head"><div><h2 class="sec flat" style="margin:0">Install GateHub</h2>
+          <p class="small" style="margin:4px 0 0">Get GateHub on your phone or laptop like an app: its own icon, its own window, works offline.</p></div>
+          <button class="btn primary hidden" id="install-btn">Install now</button></div>
+        <div class="ic-grid">
+          <div class="ic"><b>Android</b><span>In <b>Chrome</b>, tap <b>⋮</b> → <b>Add to Home screen</b> → <b>Install</b>.</span></div>
+          <div class="ic"><b>iPhone / iPad</b><span>In <b>Safari</b>, tap <b>Share</b> (□↑) → <b>Add to Home Screen</b> → <b>Add</b>.</span></div>
+          <div class="ic"><b>Laptop</b><span>In <b>Chrome</b> or <b>Edge</b>, click the <b>install icon</b> at the right of the address bar → <b>Install</b>.</span></div>
+        </div>
       </section>`);
+
+    const ib = $("#install-btn", view);
+    if (window.matchMedia("(display-mode: standalone)").matches || navigator.standalone) $("#install-card", view).classList.add("hidden");
+    else if (installPrompt && ib) { ib.classList.remove("hidden"); ib.addEventListener("click", async () => { installPrompt.prompt(); const r = await installPrompt.userChoice.catch(() => ({})); if (r.outcome === "accepted") $("#install-card", view).classList.add("hidden"); installPrompt = null; }); }
 
     const qodBtn = $("[data-qod]", view);
     if (qodBtn) qodBtn.addEventListener("click", () => { try { sessionStorage.setItem("gh.list.qod", JSON.stringify({ ids: [qodBtn.dataset.qod], label: "Question of the day", back: "#/" })); } catch {} });
@@ -658,8 +672,8 @@
       <p class="lede">${C.focusMinutes || 50}-minute focus sessions with ${C.breakMinutes || 10}-minute recesses. The timer keeps running while you move around the app.</p></header>
       <div class="rule"><span></span>❦<span></span></div>
       <div class="grid g2">
-        <div class="panel" id="timer-wrap" style="display:flex;flex-direction:column;align-items:center;gap:18px;padding:30px">
-          <div class="ring big-ring" style="--sz:300px"><svg viewBox="0 0 100 100"><defs><linearGradient id="ringGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e0ad"/><stop offset="1" stop-color="#b9773a"/></linearGradient></defs>
+        <div class="panel" id="timer-wrap">
+          <div class="ring big-ring"><svg viewBox="0 0 100 100"><defs><linearGradient id="ringGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e0ad"/><stop offset="1" stop-color="#b9773a"/></linearGradient></defs>
             <circle class="track" cx="50" cy="50" r="46" fill="none" stroke-width="4"/>
             <circle class="bar" cx="50" cy="50" r="46" fill="none" stroke-width="4" stroke-dasharray="${2 * Math.PI * 46}" stroke-dashoffset="0"/></svg>
             <div class="lbl"><div><b id="t-txt" class="mono">50:00</b><small id="t-mode">FOCUS</small></div></div></div>
@@ -845,10 +859,26 @@
     rerender: () => route()
   };
 
+  // ═══ Install prompt + phone menu ═════════════════════════
+  let installPrompt = null;
+  addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installPrompt = e; const b = $("#install-btn"); if (b) { b.classList.remove("hidden"); } });
+  addEventListener("appinstalled", () => { installPrompt = null; const c = $("#install-card"); if (c) c.classList.add("hidden"); });
+  function setupMenu() {
+    const btn = $("#m-menu"), back = $("#m-backdrop");
+    if (!btn) return;
+    const set = (open) => { document.body.classList.toggle("menu-open", open); btn.setAttribute("aria-expanded", String(open)); btn.setAttribute("aria-label", open ? "Close menu" : "Open menu"); };
+    btn.addEventListener("click", () => set(!document.body.classList.contains("menu-open")));
+    back.addEventListener("click", () => set(false));
+    $("#side").addEventListener("click", (e) => { if (e.target.closest("a")) set(false); });
+    addEventListener("hashchange", () => set(false));
+    addEventListener("keydown", (e) => { if (e.key === "Escape") set(false); });
+  }
+
   // ═══ Boot ═══════════════════════════════════════════════
   async function boot() {
     FX.intro(C.playIntro !== false);
     FX.theme();
+    setupMenu();
     setSideDays(); setInterval(setSideDays, 60000);
     view.innerHTML = `<div class="loading"><img src="assets/emblem.svg" alt=""><div class="eyebrow">Opening the archive…</div></div>`;
     try { await loadBank(); }

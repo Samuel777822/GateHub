@@ -1,5 +1,5 @@
 // GateHub service worker — lets the app open even when the local server is off.
-const VERSION = "gh-v9";
+const VERSION = "gh-v10";
 const SHELL = [
   "./", "index.html", "config.js", "css/app.css", "js/app.js", "js/fx.js", "js/content.js", "js/tests.js", "js/practice.js", "js/guide.js",
   "manifest.webmanifest", "assets/emblem.svg", "assets/wallpaper.png",

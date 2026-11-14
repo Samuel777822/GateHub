@@ -30,7 +30,7 @@
   </div>
 
   <div class="shell">
-    <aside class="side">
+    <aside class="side" id="side">
       <a href="#/" class="brand">
         <img src="assets/emblem.svg" alt="" class="brand-emblem">
         <div>
@@ -64,6 +64,7 @@
 
     <main class="main">
       <header class="m-top">
+        <button class="m-btn m-menu" id="m-menu" type="button" aria-label="Open menu" aria-controls="side" aria-expanded="false"><span></span><span></span><span></span></button>
         <a href="#/" class="m-brand"><img src="assets/emblem.svg" alt=""><span>GATE HUB</span></a>
         <span class="spacer"></span>
         <button class="m-btn" id="m-theme" type="button" aria-label="Switch light or dark mode">☾</button>
@@ -73,6 +74,7 @@
     </main>
   </div>
 
+  <div class="m-backdrop" id="m-backdrop"></div>
   <div id="toasts" class="toasts" aria-live="polite"></div>
 
   <script src="config.js"></script>
