@@ -114,12 +114,12 @@ window.GH_CONTENT = {
     ["Simplicity is prerequisite for reliability.", "Edsger W. Dijkstra"],
     ["The best way to predict the future is to invent it.", "Alan Kay"],
     ["Talk is cheap. Show me the code.", "Linus Torvalds"],
-    ["Computer science is no more about computers than astronomy is about telescopes.", "Edsger W. Dijkstra (attrib.)"],
+    ["The question of whether a computer can think is no more interesting than the question of whether a submarine can swim.", "Edsger W. Dijkstra"],
     ["An expert is a person who has made all the mistakes that can be made in a very narrow field.", "Niels Bohr"],
     ["It always seems impossible until it's done.", "Nelson Mandela"],
     ["The function of education is to teach one to think intensively and to think critically.", "Martin Luther King Jr."],
-    ["Discipline is choosing between what you want now and what you want most.", "Abraham Lincoln (attrib.)"],
+    ["Controlling complexity is the essence of computer programming.", "Brian Kernighan"],
     ["Programs must be written for people to read, and only incidentally for machines to execute.", "Harold Abelson"],
-    ["If you can't explain it simply, you don't understand it well enough.", "Albert Einstein (attrib.)"]
+    ["Science is what we understand well enough to explain to a computer. Art is everything else we do.", "Donald Knuth"]
   ]
 };
