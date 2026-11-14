@@ -145,6 +145,8 @@
     }
     const idx = Math.min(Math.max(0, +idxStr), L.ids.length - 1);
     const q = QBY[L.ids[idx]], t = topicOf(q);
+    if (!GH.ensure([q.s])) return;
+    const nx = QBY[L.ids[idx + 1]]; if (nx) GH.need([nx.s]).catch(() => {});
     const href = (i) => GH.runHref(kind, arg, i);
     const sess = ensureSession(kind, arg, L.label, L.sub);
     sess.href = href(idx);
@@ -321,6 +323,7 @@
   function summary([id]) {
     const x = S.sessions.find((s) => s.id === id);
     if (!x) { location.hash = "#/practice"; return; }
+    if (!GH.ensure(GH.sidsOf(Object.keys(x.items)))) return;
     const rows = Object.entries(x.items).map(([qid, it]) => ({ q: QBY[qid], ...it })).filter((r) => r.q);
     const answered = rows.filter((r) => r.r === "c" || r.r === "w");
     const c = rows.filter((r) => r.r === "c").length, w = rows.filter((r) => r.r === "w").length, seen = rows.filter((r) => r.r === "s").length, skipped = rows.filter((r) => !r.r).length;
@@ -365,7 +368,7 @@
         <section class="panel section">
           <h2 class="sec">Questions</h2>
           <div class="table-wrap"><table class="tbl qtbl"><thead><tr><th>#</th><th>Question</th><th>Result</th><th>Time</th><th></th></tr></thead><tbody>
-            ${rows.map((r, i) => `<tr class="r-${r.r === "c" ? "c" : r.r === "w" ? "w" : "u"}"><td>${i + 1}</td><td><div class="clip">${esc(GH.strip(r.q.q)).slice(0, 140) || "(figure-based question)"}</div><div class="small">${esc(r.q.p)} · ${DIFF[r.q.d] || ""}</div></td>
+            ${rows.map((r, i) => `<tr class="r-${r.r === "c" ? "c" : r.r === "w" ? "w" : "u"}"><td>${i + 1}</td><td><div class="clip qprev">${GH.preview(r.q)}</div><div class="small">${esc(r.q.p)} · ${DIFF[r.q.d] || ""}</div></td>
               <td>${r.r === "c" ? '<span class="ok-t">Correct</span>' : r.r === "w" ? '<span class="bad-t">Wrong</span>' : r.r === "s" ? "Viewed answer" : "Skipped"}</td><td>${human(r.t)}</td>
               <td><button class="btn ghost sm" data-open="${r.q.id}">Open</button></td></tr>`).join("")}
           </tbody></table></div>

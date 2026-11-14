@@ -25,7 +25,7 @@
 - **Reviews.** Rate GateHub and tell us what to improve; every review goes straight to the Tech Gates team.
 - **GateHub Display.** Our own typeface: classical carved Roman capitals, drawn in code (`tools/make_font.py`). It's used across the app, and the GATE HUB carved into the home-page wallpaper is lettered in it too.
 - **Your GATE year.** On first visit GateHub asks which year you're writing GATE CS (it's always in February) and counts down to it.
-- **Fast to open.** The wallpaper is a 48–145 KB WebP image, question pictures load only when you open the question, and everything works offline after the first visit.
+- **Fast to open.** GateHub first loads a small index (about 160 KB) and opens straight away. Full questions and explanations arrive one subject at a time, only when you need them, and quietly in the background after that. Question pictures load only when you open the question, and everything works offline after the first visit.
 - **Light and dark themes**, a study timer, mock-test records and progress backup.
 
 Progress is stored only in your own browser. There's no account and no tracking.
@@ -64,9 +64,9 @@ To install it as an app, open GateHub in Chrome and choose **⋮ → Cast, save,
 |---|---|
 | `index.html`, `css/`, `js/` | The app (plain HTML, CSS and JavaScript, no build step) |
 | `js/content.js` | Lecture plans, textbooks and quotes |
-| `data/bank.json` | The question bank with topics and estimated difficulty (generated) |
+| `data/index.json`, `data/q/` | The question bank, generated: a small index (topics, years, answer keys, difficulty) loaded at start, and one file per subject with the full questions and explanations, loaded when needed |
 | `data/questions.json`, `data/img/` | The source question bank and its figures |
-| `tools/build_bank.py` | Builds `bank.json`: maps every question to a topic and estimates its difficulty |
+| `tools/build_bank.py` | Builds the question bank files: maps every question to a topic and estimates its difficulty |
 | `tools/make_icons.py`, `tools/make_techgates.py` | Generate the GateHub icons and the Tech Gates logo and lettering |
 | `tools/make_font.py`, `assets/fonts/` | Build the GateHub Display typeface (preview it in `tools/font-specimen.html`) |
 | `tools/make_banner.py` | Re-letters the wallpaper's GATE HUB in GateHub Display and exports the WebP/JPEG banner images |

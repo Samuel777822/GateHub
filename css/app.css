@@ -905,6 +905,7 @@ body { font-synthesis-weight: none; }
     flex-direction: column; gap: 14px; padding: 18px 14px calc(18px + env(safe-area-inset-bottom));
     overflow-y: auto; transform: translateX(-102%); transition: transform .3s var(--ease); box-shadow: 8px 0 30px rgba(0,0,0,.35);
   }
+  body:not(.menu-open) .side { box-shadow: none; }
   body.menu-open .side { transform: none; }
   .m-backdrop { display: block; position: fixed; inset: 0; z-index: 35; background: rgba(20, 8, 4, .5); opacity: 0; pointer-events: none; transition: opacity .3s; }
   body.menu-open .m-backdrop { opacity: 1; pointer-events: auto; }
@@ -993,3 +994,41 @@ body { font-synthesis-weight: none; }
 .modal { width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 40px); overflow-y: auto; }
 .year-modal { width: min(460px, calc(100vw - 32px)); }
 @media (max-width: 600px) { .year-other { flex-wrap: wrap; } .year-other input { flex: 1; min-width: 0; } .year-btn b { font-size: 1.4rem; } }
+
+/* phones: use the visible screen height (100vh is taller than the screen when the browser bars show) */
+.shell { height: 100vh; height: 100dvh; }
+.modal { max-height: calc(100dvh - 40px); }
+.main { overscroll-behavior: contain; }
+.view { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+
+/* question previews: real maths, clamped to a few lines */
+.qprev p, .qprev div, .qprev ul, .qprev ol, .qprev li, .qprev h1, .qprev h2, .qprev h3, .qprev h4, .qprev blockquote { display: inline; margin: 0; padding: 0; font: inherit; }
+.qprev .katex-display { display: inline; margin: 0; }
+.qprev .katex-display > .katex { display: inline; }
+.qprev .katex { font-size: 1.02em; }
+.qprev .muted { color: var(--ink-3); font-style: italic; }
+.qod-text { font-size: 1.02rem; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 14px; overflow-wrap: anywhere; }
+.qitem .qt, .clip { overflow-wrap: anywhere; }
+
+/* Learn with Claude on phones: number beside the heading, everything else full width */
+@media (max-width: 600px) {
+  .learn-head .claude-logo.big { width: 30px; height: 30px; }
+  .lsec { display: grid !important; grid-template-columns: 30px minmax(0, 1fr); column-gap: 10px; row-gap: 0; align-items: center !important; }
+  .lsec-body { display: contents; }
+  .lsec-body > * { grid-column: 1 / -1; min-width: 0; }
+  .lsec-body > h2, .lsec-body > .lhead { grid-column: 2; }
+  .lsec-body > h2 { margin: 0 !important; }
+  .lsec-body > .lhead { flex-wrap: wrap; }
+  .lsec-body > .lhead + * , .lsec-body > h2 + * { margin-top: 12px !important; }
+  .claude-apps { grid-template-columns: 1fr !important; gap: 8px; }
+  .claude-app { padding: 8px 12px; }
+  .claude-app .claude-logo { width: 28px; height: 28px; }
+  .claude-app span { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .ls { padding: 12px; gap: 10px; }
+  .learn-foot { flex-wrap: wrap; gap: 10px; }
+  .learn-foot .btn { white-space: normal; text-align: center; }
+  .learn-session .small, .ls-text span { overflow-wrap: anywhere; }
+}
+
+/* phone banner: the cropped high-resolution artwork always fills the banner */
+@media (max-width: 600px) { .banner { background-size: cover; background-position: center top; } }

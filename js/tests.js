@@ -18,8 +18,7 @@
   const DIFF = { e: "Easy", m: "Moderate", h: "Hard" };
   const mk = (q) => ((q.m || 1) >= 2 ? 2 : 1);
   const negOf = (q) => (q.t === "MCQ" ? (q.neg != null ? q.neg : +(mk(q) / 3).toFixed(2)) : 0);
-  const eligible = (q) => ["MCQ", "MSQ", "NAT"].includes(q.t) && !["se", "web"].includes(q.s) && !q.oos && q.a && !q.a.mta
-    && ((q.a.opts && Array.isArray(q.o) && q.o.length) || q.a.lo != null);
+  const eligible = (q) => !!q.el;   // precomputed by tools/build_bank.py
   const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   const fmtTime = (s) => { s = Math.max(0, Math.round(s)); const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return h ? `${h}:${pad(m)}:${pad(x)}` : `${pad(m)}:${pad(x)}`; };
   const fmtMin = (s) => (s >= 60 ? `${Math.round(s / 60)} min` : `${Math.round(s)} s`);
@@ -226,6 +225,7 @@
     const T = findTest(id);
     if (!T) { location.hash = "#/tests"; return; }
     if (T.status === "done") { location.hash = `#/test/${id}/result`; return; }
+    if (!GH.ensure(GH.sidsOf(T.qids))) return;
     let timerId = 0, last = Date.now(), saveTick = 0;
 
     GH.paint(`
@@ -378,6 +378,7 @@
     const T = findTest(id);
     if (!T) { location.hash = "#/tests"; return; }
     if (T.status !== "done") { location.hash = `#/test/${id}`; return; }
+    if (!GH.ensure(GH.sidsOf(T.qids))) return;
     const R = T.result, qs = T.qids.map((qid) => QBY[qid]);
     const pct = R.max ? Math.max(0, (R.score / R.max) * 100) : 0;
     const attempted = R.correct + R.wrong;
@@ -480,6 +481,7 @@
   function review([id, iStr]) {
     const T = findTest(id);
     if (!T || T.status !== "done") { location.hash = "#/tests"; return; }
+    if (!GH.ensure(GH.sidsOf(T.qids))) return;
     const i = Math.max(0, Math.min(T.qids.length - 1, +iStr));
     const q = QBY[T.qids[i]], a = T.ans[q.id] || { sel: [], nat: "" }, p = T.result.per[q.id];
     const fmt = q.of || q.qf, t = topicOf(q);
@@ -549,6 +551,7 @@
 
   // ═══ Notebook (#/notebook) ══════════════════════════════
   function notebook() {
+    if (!GH.ensure(GH.sidsOf(Object.keys(S.notes || {})))) return;
     const f = { q: "", s: "" };
     GH.paint(`
       <header class="page-head"><p class="eyebrow">Your Notebook</p><h1 class="title">Concepts to Remember</h1>

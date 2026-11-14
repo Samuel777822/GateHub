@@ -66,9 +66,9 @@
       </header>
 
       <section class="panel install-claude ${S.hasClaude ? "done" : ""}" id="ic-claude">
-        <div class="row" style="align-items:flex-start;gap:14px">
+        <div class="row lsec" style="align-items:flex-start;gap:14px">
           <span class="step-badge">1</span>
-          <div style="flex:1;min-width:0">
+          <div class="lsec-body" style="flex:1;min-width:0">
             <h2 class="sec flat" style="margin:0">First, install Claude</h2>
             <p class="small" style="margin:4px 0 12px">Claude is the AI tutor GateHub uses. It's free to start: sign in with Google or your email.</p>
             <div class="claude-apps">${APPS.map(([d, s, u]) => `<a class="claude-app" href="${u}" target="_blank" rel="noopener">${LOGO}<span><b>${d}</b><small>${s}</small></span></a>`).join("")}</div>
@@ -78,9 +78,9 @@
       </section>
 
       <section class="panel learn-pick">
-        <div class="row" style="align-items:flex-start;gap:14px">
+        <div class="row lsec" style="align-items:flex-start;gap:14px">
           <span class="step-badge">2</span>
-          <div style="flex:1;min-width:0">
+          <div class="lsec-body" style="flex:1;min-width:0">
             <h2 class="sec flat" style="margin:0 0 12px">Pick a topic</h2>
             <div class="pick-row">
               <select id="l-s" aria-label="Subject">${subs.map((s) => `<option value="${s.id}" ${s.id === sid ? "selected" : ""}>${esc(s.name)}</option>`).join("")}</select>
@@ -119,10 +119,10 @@
       const sess = S.learnActive && S.learnActive.key === t.key ? S.learnActive : null;
       const done = new Set(sess ? sess.steps : []);
       $("#l-session").innerHTML = `
-        <div class="row" style="align-items:flex-start;gap:14px">
+        <div class="row lsec" style="align-items:flex-start;gap:14px">
           <span class="step-badge">3</span>
-          <div style="flex:1;min-width:0">
-            <div class="row" style="justify-content:space-between;gap:10px">
+          <div class="lsec-body" style="flex:1;min-width:0">
+            <div class="row lhead" style="justify-content:space-between;gap:10px">
               <div><h2 class="sec flat" style="margin:0">Your learning session</h2><div class="small">${esc(t.subject.name)} › ${esc(t.chapter.name)} › <b>${esc(t.name)}</b></div></div>
               ${sess ? `<span class="sess-clock"><span class="small">Session</span> <b class="mono" id="l-clock">${fmt(sess.elapsed)}</b></span>` : ""}
             </div>
@@ -150,6 +150,7 @@
         S.learnActive = { key: t.key, label: t.name, start: Date.now(), elapsed: 0, steps: [] };
       }
       const st = STEPS.find((x) => x.id === id);
+      if (id === "pyq" && !GH.ready([sid])) { GH.need([sid]).catch(() => {}); FX.toast("Getting this topic's questions ready. Tap again in a moment."); return; }
       if (!S.learnActive.steps.includes(id)) S.learnActive.steps.push(id);
       save();
       openClaude(st.p(context(t), t));
@@ -166,7 +167,7 @@
     }
 
     const onChange = (e) => {
-      if (e.target.id === "l-s") { sid = e.target.value; cid = ""; tid = ""; fillChapters(); }
+      if (e.target.id === "l-s") { sid = e.target.value; cid = ""; tid = ""; fillChapters(); GH.need([sid]).catch(() => {}); }
       else if (e.target.id === "l-c") { cid = e.target.value; tid = ""; fillChapters(); }
       else if (e.target.id === "l-t") { tid = e.target.value; S.learnLast = { s: sid, c: cid, t: tid }; save(); paintSession(); }
       else if (e.target.id === "has-claude") { S.hasClaude = e.target.checked; save(); $("#ic-claude").classList.toggle("done", e.target.checked); }

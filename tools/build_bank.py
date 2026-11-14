@@ -1,9 +1,10 @@
-"""Builds data/bank.json from data/questions.json.
+"""Builds data/index.json and data/q/<subject>.json from data/questions.json.
 
 Adds a topic layer under every chapter (subject -> chapter -> topic -> questions)
 using a curated topic map: a question goes to the first topic whose tags or
 keywords match, otherwise to the chapter's "Mixed Problems" topic.
 
+Writes data/index.json (small, loaded at start) and data/q/<subject>.json (full text).
 Run:  py -I tools/build_bank.py
 """
 import json, re, sys, collections
@@ -380,8 +381,31 @@ def main():
                          "chapters": chapters, "count": sum(c["count"] for c in chapters)})
 
     add_difficulty(qs)
-    out = {"meta": d["meta"], "subjects": subjects, "papers": d["papers"], "questions": qs}
-    OUT.write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+
+    # Split for fast loading: a small index the app needs at start (ids, topics,
+    # years, marks, answer keys, difficulty) and one file per subject with the
+    # full text, options and explanations, fetched only when needed.
+    INDEX = ["id", "p", "y", "set", "n", "s", "c", "t", "m", "neg", "tp", "d", "oos", "official", "a"]
+    FULL = ["q", "qf", "o", "of", "e", "note", "scan", "fig", "ga"]
+    def eligible(q):   # usable in timed tests: modern formats with a clean key
+        return (q["t"] in ("MCQ", "MSQ", "NAT") and q["s"] not in ("se", "web") and not q.get("oos")
+                and q.get("a") and not q["a"].get("mta")
+                and ((q["a"].get("opts") and isinstance(q.get("o"), list) and q["o"]) or q["a"].get("lo") is not None))
+    index_qs, chunks = [], collections.defaultdict(dict)
+    for q in qs:
+        row = {k: q[k] for k in INDEX if k in q}
+        if eligible(q): row["el"] = 1
+        index_qs.append(row)
+        chunks[q["s"]][q["id"]] = {k: q[k] for k in FULL if k in q}
+    compact = dict(ensure_ascii=False, separators=(",", ":"))
+    data = ROOT / "data"
+    (data / "index.json").write_text(json.dumps({"meta": d["meta"], "subjects": subjects, "papers": d["papers"], "questions": index_qs}, **compact), encoding="utf-8")
+    (data / "q").mkdir(exist_ok=True)
+    for sid, rows in chunks.items():
+        (data / "q" / f"{sid}.json").write_text(json.dumps(rows, **compact), encoding="utf-8")
+    if OUT.exists():
+        OUT.unlink()   # the old single-file bank is replaced by index.json + q/*.json
+    print("index.json", (data / "index.json").stat().st_size // 1024, "KB;", len(chunks), "subject files")
 
     # report
     total_topics = sum(len(c["topics"]) for s in subjects for c in s["chapters"])

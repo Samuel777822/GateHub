@@ -25,7 +25,8 @@
   const tKey = (s, c, t) => `${s}~${c}~${t}`;
 
   async function loadBank() {
-    const r = await fetch("data/bank.json");
+    const r = await fetch("data/index.json");
+    if (!r.ok) throw new Error("HTTP " + r.status);
     BANK = await r.json();
     for (const q of BANK.questions) QBY[q.id] = q;
     for (const s of BANK.subjects) {
@@ -38,6 +39,37 @@
         }
       }
     }
+  }
+
+  // Full question text, options and explanations live in data/q/<subject>.json
+  // and are fetched only when a screen needs them.
+  const LOADED = {}, PENDING = {};
+  function need(sids) {
+    return Promise.all([...new Set(sids)].filter((s) => SUBJ[s] && !LOADED[s]).map((s) => PENDING[s] || (PENDING[s] =
+      fetch(`data/q/${s}.json`).then((r) => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+        .then((rows) => { for (const id in rows) if (QBY[id]) Object.assign(QBY[id], rows[id]); LOADED[s] = 1; })
+        .catch((e) => { delete PENDING[s]; throw e; }))));
+  }
+  const ready = (sids) => sids.every((s) => LOADED[s] || !SUBJ[s]);
+  const sidsOf = (ids) => [...new Set(ids.map((id) => QBY[id] && QBY[id].s).filter(Boolean))];
+  // Call at the top of a screen: true if its questions are here; otherwise shows
+  // a short loading state and re-opens the screen once they arrive.
+  function ensure(sids) {
+    sids = [...new Set(sids)];
+    if (ready(sids)) return true;
+    const h = location.hash;
+    view.innerHTML = `<div class="loading"><img src="assets/emblem.svg" alt=""><div class="eyebrow">Loading questions…</div></div>`;
+    need(sids).then(() => { if (location.hash === h) route(); })
+      .catch((e) => { if (location.hash === h) view.innerHTML = `<div class="panel empty">Couldn't load these questions (${esc(e.message)}). Check your internet connection, then <a href="#" onclick="location.reload();return false">try again</a>.</div>`; });
+    return false;
+  }
+  // After the first screen is up, fetch the rest quietly, one subject at a time.
+  function prefetchAll() {
+    const c = navigator.connection;
+    if (c && (c.saveData || /2g/.test(c.effectiveType || ""))) return;
+    const order = BANK.subjects.map((s) => s.id).filter((s) => !LOADED[s]);
+    const next = () => { const s = order.shift(); if (s) need([s]).catch(() => {}).then(() => setTimeout(next, 300)); };
+    next();
   }
 
   // ═══ Stats ══════════════════════════════════════════════
@@ -139,7 +171,20 @@
     d.innerHTML = rich(src, fmt).replace(/<br\s*\/?>/gi, "\n").replace(/<\/p>/gi, "\n").replace(/<img[^>]*>/gi, " [figure — see screenshot] ");
     return d.textContent.replace(/\n{3,}/g, "\n\n").trim();
   };
-  const strip = (h) => String(h).replace(/<[^>]+>/g, " ").replace(/\\[()[\]]/g, "").replace(/\s+/g, " ").trim();
+  const ENT = { amp: "&", lt: "<", gt: ">", quot: '"', "#39": "'", nbsp: " ", le: "≤", ge: "≥", ne: "≠", times: "×", rarr: "→" };
+  const strip = (h) => String(h ?? "").replace(/<[^>]+>/g, " ").replace(/&(#?\w+);/g, (m, k) => ENT[k] || (/^#\d+$/.test(k) ? String.fromCharCode(+k.slice(1)) : m))
+    .replace(/\\[()[\]]/g, "").replace(/\s+/g, " ").trim();
+  // A short preview of a question for lists and cards; previewMath() renders its maths.
+  function preview(q) {
+    if (q.q == null) return `<span class="muted">Loading…</span>`;
+    const d = document.createElement("div");
+    d.innerHTML = rich(q.q, q.qf);
+    d.querySelectorAll("img, svg, table, pre").forEach((n) => n.replaceWith(document.createTextNode(n.tagName === "TABLE" ? " [table] " : " [figure] ")));
+    d.querySelectorAll("br").forEach((n) => n.replaceWith(" "));
+    const html = d.innerHTML.trim();
+    return html && d.textContent.replace(/\[(figure|table)\]/g, "").trim() ? (q.qf === "md" ? `<span data-md>${html}</span>` : html) : "(figure-based question)";
+  }
+  const previewMath = (root) => $$(".qprev", root).forEach((el) => typeset(el, !!el.querySelector("[data-md]")));
 
   // ═══ Router ═════════════════════════════════════════════
   const routes = [
@@ -269,7 +314,7 @@
           <div class="panel">
             <h2 class="sec">Question of the day</h2>
             ${qod ? `<div class="small" style="margin-bottom:6px">${esc(qod.p)} · ${esc(subjName(qod.s))}${qodTopic ? " › " + esc(qodTopic.name) : ""}</div>
-              <div class="serif" style="font-size:1.02rem;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:14px">${esc(strip(qod.q)).slice(0, 380)}</div>
+              <div class="serif qprev qod-text" id="qod-text">${preview(qod)}</div>
               <a class="btn" href="#/run/f/qod/0" data-qod="${qod.id}">Solve it</a>` : `<p class="small">Every question is solved. Remarkable.</p>`}
           </div>
           <div class="panel">
@@ -294,6 +339,10 @@
     if (window.matchMedia("(display-mode: standalone)").matches || navigator.standalone) $("#install-card", view).classList.add("hidden");
     else if (installPrompt && ib) { ib.classList.remove("hidden"); ib.addEventListener("click", async () => { installPrompt.prompt(); const r = await installPrompt.userChoice.catch(() => ({})); if (r.outcome === "accepted") $("#install-card", view).classList.add("hidden"); installPrompt = null; }); }
 
+    if (qod) {
+      const fill = () => { const el = $("#qod-text", view); if (el) { el.innerHTML = preview(qod); previewMath(el.parentElement); } };
+      if (ready([qod.s])) fill(); else need([qod.s]).then(fill).catch(() => {});
+    }
     const qodBtn = $("[data-qod]", view);
     if (qodBtn) qodBtn.addEventListener("click", () => { try { sessionStorage.setItem("gh.list.qod", JSON.stringify({ ids: [qodBtn.dataset.qod], label: "Question of the day", back: "#/" })); } catch {} });
 
@@ -475,7 +524,7 @@
         if (f.status === "w" && (!a || a.r !== "w")) return false;
         if (f.status === "c" && (!a || a.r !== "c")) return false;
         if (f.status === "bm" && !S.bm[q.id]) return false;
-        if (needle) { q._txt = q._txt || strip(q.q).toLowerCase(); if (!q._txt.includes(needle)) return false; }
+        if (needle) { if (q.q == null) return false; q._txt = q._txt || strip(q.q).toLowerCase(); if (!q._txt.includes(needle)) return false; }
         return true;
       });
       $("#f-count").textContent = `${filtered.length} question${filtered.length === 1 ? "" : "s"}`;
@@ -484,10 +533,11 @@
       listEl.innerHTML = filtered.slice(0, shown).map((q, i) => {
         const a = S.att[q.id], t = TOPIC[tKey(q.s, q.c, q.tp)];
         return `<a class="qitem" href="#/run/f/list/${i}" data-i="${i}"><span class="dot ${a ? a.r : ""}"></span>
-          <div><div class="qt">${esc(strip(q.q)).slice(0, 260) || "(figure-based question)"}</div>
+          <div><div class="qt qprev">${preview(q)}</div>
           <div class="qm">${esc(q.p)}${q.n ? " · Q" + esc(q.n) : ""} · ${esc(SUBJ[q.s].short)}${t ? " › " + esc(t.name) : ""}</div></div>
           <div class="qr">${S.bm[q.id] ? '<span class="pill gold">★</span>' : ""}<span class="pill">${q.t}</span><span class="pill">${q.m} m</span></div></a>`;
       }).join("") + (filtered.length > shown ? `<button class="btn" id="more" style="align-self:center;margin-top:8px">Show more (${filtered.length - shown} left)</button>` : "");
+      previewMath(listEl);
     };
     const storeList = () => { try { sessionStorage.setItem("gh.list.list", JSON.stringify({ ids: filtered.map((q) => q.id), label: scopeLabel, back: location.hash })); } catch {} };
 
@@ -506,7 +556,10 @@
     };
     view.addEventListener("click", onClick); view.addEventListener("input", onInput);
     apply();
-    return () => { view.removeEventListener("click", onClick); view.removeEventListener("input", onInput); };
+    // fill in question text as each subject's file arrives
+    let alive = true;
+    for (const s of sidsOf(scopeIds)) if (!ready([s])) need([s]).then(() => { if (alive) apply(); }).catch(() => {});
+    return () => { alive = false; view.removeEventListener("click", onClick); view.removeEventListener("input", onInput); };
   }
   const years = () => { const out = []; for (let y = 1987; y <= 2026; y++) out.push(y); return out; };
 
@@ -854,7 +907,8 @@
   window.GH = {
     S, save, QBY, TOPIC, SUBJ, CHAP, tKey, esc, pad, dayKey, $, $$, LET,
     get BANK() { return BANK; }, view,
-    stats, record, rich, typeset, plain, strip, answerText, grade, askClaude,
+    stats, record, rich, typeset, plain, strip, preview, previewMath, answerText, grade, askClaude,
+    need, ready, ensure, sidsOf,
     paint, bar, accPill, ringPct, subjName, runHref, get examDate() { return examDate; }, yearPicker,
     resolveList, firstOpenIdx, topicHref, firstUnfinishedTopic, fmtTopic: (q) => TOPIC[tKey(q.s, q.c, q.tp)],
     addRoute: (re, fn, nav) => extraRoutes.push([re, fn, nav]),
@@ -882,12 +936,13 @@
     FX.theme();
     setupMenu();
     setSideDays(); setInterval(setSideDays, 60000);
-    view.innerHTML = `<div class="loading"><img src="assets/emblem.svg" alt=""><div class="eyebrow">Opening the archive…</div></div>`;
+    view.innerHTML = `<div class="loading"><img src="assets/emblem.svg" alt=""><div class="eyebrow">Opening GateHub…</div></div>`;
     try { await loadBank(); }
     catch (e) { view.innerHTML = `<div class="panel empty">Couldn't load the question bank (${esc(e.message)}). Start GateHub with the launcher so it runs on localhost.</div>`; return; }
     addEventListener("hashchange", route);
     addEventListener("resize", () => setNav(($("#nav a.active") || {}).dataset ? $("#nav a.active").dataset.nav : ""));
     route();
+    setTimeout(prefetchAll, 2500);
     const sc = $(".side-count"); if (sc) { sc.style.cursor = "pointer"; sc.title = "Change your GATE year"; sc.addEventListener("click", () => yearPicker(false)); }
     if (!S.gateYear) setTimeout(() => yearPicker(true), document.body.classList.contains("intro-playing") ? 3300 : 400);
     if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("sw.js").catch(() => {});

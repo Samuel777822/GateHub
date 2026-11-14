@@ -1,5 +1,6 @@
 // GateHub service worker — lets the app open even when the local server is off.
-const VERSION = "gh-v14";
+const VERSION = "gh-v15";
+const DATA = "gh-data-v1";   // question files; kept across app updates
 const SHELL = [
   "./", "index.html", "config.js", "css/app.css", "js/app.js", "js/fx.js", "js/content.js", "js/tests.js", "js/practice.js", "js/guide.js", "js/learn.js", "assets/brand/claude-icon.png",
   "manifest.webmanifest", "assets/emblem.svg", "assets/wallpaper-mobile.webp",
@@ -11,7 +12,7 @@ self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(VERSION).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
 });
 self.addEventListener("activate", (e) => {
-  e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== VERSION).map((k) => caches.delete(k)))).then(() => self.clients.claim()));
+  e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== VERSION && k !== DATA).map((k) => caches.delete(k)))).then(() => self.clients.claim()));
 });
 
 self.addEventListener("fetch", (e) => {
@@ -27,6 +28,16 @@ self.addEventListener("fetch", (e) => {
     e.respondWith(caches.open(VERSION).then(async (c) => {
       const hit = await c.match(req); if (hit) return hit;
       const res = await fetch(req); if (res.ok) c.put(req, res.clone()); return res;
+    }));
+    return;
+  }
+  // Question data: answer from cache at once, refresh in the background
+  if (sameOrigin && /\/data\/(index\.json|q\/)/.test(url.pathname)) {
+    e.respondWith(caches.open(DATA).then(async (c) => {
+      const hit = await c.match(req);
+      const net = fetch(req).then((res) => { if (res.ok) c.put(req, res.clone()); return res; });
+      if (hit) { e.waitUntil(net.catch(() => {})); return hit; }
+      return net;
     }));
     return;
   }
