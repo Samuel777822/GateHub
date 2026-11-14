@@ -6,7 +6,7 @@
 <p align="center"><b>A calm, complete place to prepare for GATE CSE.</b><br>A project by <b>Tech Gates</b>.</p>
 
 <p align="center">
-  <b><a href="https://samuel777822.github.io/gatehub/">Open GateHub →</a></b><br>
+  <b><a href="https://samuel777822.github.io/GateHub/">Open GateHub →</a></b><br>
   Works in any browser on phone or laptop, and can be installed as an app.
 </p>
 
@@ -29,7 +29,7 @@ Progress is stored only in your own browser. There's no account and no tracking.
 
 ## Install GateHub on your device
 
-GateHub is a website that installs like an app: it gets its own icon, opens in its own window and keeps working offline. Open **<https://samuel777822.github.io/gatehub/>** first, then follow the steps for your device.
+GateHub is a website that installs like an app: it gets its own icon, opens in its own window and keeps working offline. Open **<https://samuel777822.github.io/GateHub/>** first, then follow the steps for your device.
 
 | Device | Browser | Steps |
 |---|---|---|
