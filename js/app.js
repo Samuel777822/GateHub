@@ -199,6 +199,7 @@
         </div>
       </section>
       <blockquote class="home-quote">“${esc(qt)}”<cite>${esc(qa)}</cite></blockquote>
+      <p class="home-help"><a href="#/guide">New here? See how GateHub works</a><span>·</span><a href="#/review">Leave a review</a></p>
 
       <section class="stats">
         <div><div class="v">${all.done}<small> / ${all.total}</small></div><div class="k">PYQs solved</div></div>
@@ -759,6 +760,7 @@
         <p>It's free, it works on your phone and your laptop, and your progress stays on your own device.</p>
       </section>
 
+      <div class="row" style="margin-top:10px"><a class="btn primary" href="#/review">Leave a review</a><a class="btn" href="#/guide">How GateHub works</a></div>
       <h2 class="sec" style="margin-top:34px">The founders</h2>
       <div class="founders">
         ${FOUNDERS.map((f) => `<article class="founder panel">

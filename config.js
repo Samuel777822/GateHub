@@ -9,6 +9,10 @@ window.GATEHUB_CONFIG = {
   breakMinutes: 10,
   playIntro: true,                      // gate-opening animation when the app starts
 
+  // Reviews are emailed to the Tech Gates team through Web3Forms (web3forms.com).
+  // Paste the access key here. It is safe to be public: it can only send to the team's inbox.
+  reviews: { web3formsKey: "" },
+
   // Quick-launch links. They open in your normal Chrome window, so your logins stay.
   links: [
     { title: "GATE Wallah", sub: "Your batches & lectures", url: "https://www.pw.live/gate", key: "pw" },

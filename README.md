@@ -20,9 +20,28 @@
 - **Ask Claude on any question.** One click copies a screenshot of the question and opens a new Claude chat with the question already typed in.
 - **A lecture plan for every subject.** Start with the MIT, Stanford or Harvard course, then use NPTEL only for the GATE topics it doesn't cover. Exact lecture numbers are given for both.
 - **Notebook.** Press ✎ on any question to write down the idea you want to remember. All your notes live in one searchable place.
+- **How it works.** A ten-step illustrated guide inside the app.
+- **Reviews.** Rate GateHub and tell us what to improve; every review goes straight to the Tech Gates team.
+- **GateHub Display.** Our own typeface: classical carved Roman capitals, drawn in code (`tools/make_font.py`).
 - **Light and dark themes**, a study timer, mock-test records and progress backup.
 
 Progress is stored only in your own browser. There's no account and no tracking.
+
+## Install GateHub on your device
+
+GateHub is a website that installs like an app: it gets its own icon, opens in its own window and keeps working offline. Open **<https://samuel777822.github.io/gatehub/>** first, then follow the steps for your device.
+
+| Device | Browser | Steps |
+|---|---|---|
+| **Android phone or tablet** | Chrome | Tap **⋮** (top right) → **Add to Home screen** → **Install**. GateHub appears with your other apps. |
+| **iPhone or iPad** | Safari | Tap the **Share** button (square with an arrow) → **Add to Home Screen** → **Add**. |
+| **Windows laptop** | Chrome or Edge | Click the **install icon** at the right end of the address bar (a monitor with a down arrow), or **⋮ → Cast, save, and share → Install page as app**. To keep it handy, right-click its taskbar icon → **Pin to taskbar**. |
+| **Mac** | Chrome or Edge | Click the **install icon** in the address bar → **Install**. It appears in Launchpad and can stay in the Dock. |
+| **Mac** | Safari 17+ | **File → Add to Dock**. |
+
+To uninstall, remove it the way you'd remove any app. Your progress is stored in your browser, so to move it to a new device use **Records → Export progress**, then **Import progress** on the other device.
+
+New to GateHub? Open **How it works** in the app for a ten-step picture guide.
 
 ## Run it on your computer
 
@@ -46,6 +65,7 @@ To install it as an app, open GateHub in Chrome and choose **⋮ → Cast, save,
 | `data/questions.json`, `data/img/` | The source question bank and its figures |
 | `tools/build_bank.py` | Builds `bank.json`: maps every question to a topic and estimates its difficulty |
 | `tools/make_icons.py`, `tools/make_techgates.py` | Generate the GateHub icons and the Tech Gates logo and lettering |
+| `tools/make_font.py`, `assets/fonts/` | Build the GateHub Display typeface (preview it in `tools/font-specimen.html`) |
 | `sw.js`, `manifest.webmanifest` | Offline support and app install |
 
 ## The team: Tech Gates
@@ -61,4 +81,5 @@ To install it as an app, open GateHub in Chrome and choose **⋮ → Cast, save,
 - **GATE question papers** are published by the IITs and IISc.
 - **Lecture videos** belong to their universities and creators: MIT OpenCourseWare, Stanford, Harvard, CMU, Berkeley and NPTEL (the IITs and IISc). GateHub only links to them.
 - **Libraries:** [KaTeX](https://katex.org), [marked](https://marked.js.org), [DOMPurify](https://github.com/cure53/DOMPurify) and [html-to-image](https://github.com/bubkoo/html-to-image).
-- **Fonts:** Cinzel, Source Serif 4, Source Sans 3 and JetBrains Mono, from Google Fonts.
+- **Fonts:** GateHub Display (our own); Source Serif 4, Source Sans 3 and JetBrains Mono from Google Fonts.
+- **Reviews** are delivered by [Web3Forms](https://web3forms.com).
