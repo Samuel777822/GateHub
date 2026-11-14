@@ -1,0 +1,8 @@
+# local-only files
+.claude/
+theme/
+__pycache__/
+*.pyc
+Thumbs.db
+desktop.ini
+.DS_Store

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GateHub</title>
+  <meta name="theme-color" content="#2a0f09">
+  <script>try { document.documentElement.dataset.theme = localStorage.getItem("gh.theme") === "dark" ? "dark" : "light"; } catch (e) { document.documentElement.dataset.theme = "light"; }</script>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png">
+  <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" crossorigin="anonymous" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <!-- Gate-opening intro -->
+  <div id="intro" class="intro" aria-hidden="true">
+    <div class="door door-l"><div class="door-panel"></div><div class="door-panel"></div></div>
+    <div class="door door-r"><div class="door-panel"></div><div class="door-panel"></div></div>
+    <div class="intro-center">
+      <img class="intro-emblem" src="assets/emblem.svg" alt="">
+      <div class="intro-title" aria-label="GATE HUB"></div>
+      <div class="intro-rule"><span></span><i>❦</i><span></span></div>
+      <div class="intro-motto">Per aspera ad portam</div>
+    </div>
+    <div class="intro-skip">click to enter</div>
+  </div>
+
+  <div class="shell">
+    <aside class="side">
+      <a href="#/" class="brand">
+        <img src="assets/emblem.svg" alt="" class="brand-emblem">
+        <div>
+          <div class="brand-name">GATE HUB</div>
+          <div class="brand-sub">Collegium of Computer Science</div>
+        </div>
+      </a>
+      <nav class="nav" id="nav">
+        <span class="nav-indicator" id="nav-indicator"></span>
+        <a href="#/" data-nav="atrium"><span class="nav-ic">⌂</span><span>Home</span></a>
+        <a href="#/curriculum" data-nav="curriculum"><span class="nav-ic">❡</span><span>Curriculum</span></a>
+        <a href="#/practice" data-nav="practice"><span class="nav-ic">✎</span><span>PYQ Practice</span></a>
+        <a href="#/tests" data-nav="tests"><span class="nav-ic">⏱</span><span>Timed Tests</span></a>
+        <a href="#/notebook" data-nav="notebook"><span class="nav-ic">❧</span><span>Notebook</span></a>
+        <a href="#/lectures" data-nav="lectures"><span class="nav-ic">❖</span><span>Lectures</span></a>
+        <a href="#/study" data-nav="study"><span class="nav-ic">⧗</span><span>Study Hall</span></a>
+        <a href="#/library" data-nav="library"><span class="nav-ic">✦</span><span>Library</span></a>
+        <a href="#/records" data-nav="records"><span class="nav-ic">✓</span><span>Records</span></a>
+      </nav>
+      <div class="side-foot">
+        <div class="side-count"><span class="mono" id="side-days">—</span><span class="small">days to GATE</span></div>
+        <button class="theme-btn" id="theme-btn" type="button" aria-label="Switch light or dark mode"><span id="theme-label">Dark mode</span><span id="theme-ic">☾</span></button>
+        <a class="techgates" href="#/about" title="About GateHub">
+          <span class="tg-by">A project by</span>
+          <img class="tg-lockup" src="assets/techgates-lockup-gold.svg" alt="Tech Gates">
+          <img class="tg-mark" src="assets/techgates-mark-gold.svg" alt="Tech Gates">
+        </a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="m-top">
+        <a href="#/" class="m-brand"><img src="assets/emblem.svg" alt=""><span>GATE HUB</span></a>
+        <span class="spacer"></span>
+        <button class="m-btn" id="m-theme" type="button" aria-label="Switch light or dark mode">☾</button>
+        <a class="m-btn" href="#/about" aria-label="About Tech Gates"><img src="assets/techgates-mark-gold.svg" alt=""></a>
+      </header>
+      <div id="view" class="view"></div>
+    </main>
+  </div>
+
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+
+  <script src="config.js"></script>
+  <script src="js/content.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+  <script defer src="js/fx.js"></script>
+  <script defer src="js/app.js"></script>
+  <script defer src="js/tests.js"></script>
+  <script defer src="js/practice.js"></script>
+</body>
+</html>
