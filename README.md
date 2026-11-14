@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">GateHub</h1>
-<p align="center"><b>A calm, complete place to prepare for GATE CSE.</b><br>A project by <b>Tech Gates</b>.</p>
+<p align="center"><b>A calm, complete place to prepare for GATE CS (Computer Science & IT).</b><br>Built by students, for every GATE CS aspirant. A project by <b>Tech Gates</b>.</p>
 
 <p align="center">
   <b><a href="https://samuel777822.github.io/GateHub/">Open GateHub →</a></b><br>
@@ -23,7 +23,9 @@
 - **Notebook.** Press ✎ on any question to write down the idea you want to remember. All your notes live in one searchable place.
 - **How it works.** A ten-step illustrated guide inside the app.
 - **Reviews.** Rate GateHub and tell us what to improve; every review goes straight to the Tech Gates team.
-- **GateHub Display.** Our own typeface: classical carved Roman capitals, drawn in code (`tools/make_font.py`).
+- **GateHub Display.** Our own typeface: classical carved Roman capitals, drawn in code (`tools/make_font.py`). It's used across the app, and the GATE HUB carved into the home-page wallpaper is lettered in it too.
+- **Your GATE year.** On first visit GateHub asks which year you're writing GATE CS (it's always in February) and counts down to it.
+- **Fast to open.** The wallpaper is a 48–145 KB WebP image, question pictures load only when you open the question, and everything works offline after the first visit.
 - **Light and dark themes**, a study timer, mock-test records and progress backup.
 
 Progress is stored only in your own browser. There's no account and no tracking.
@@ -67,6 +69,8 @@ To install it as an app, open GateHub in Chrome and choose **⋮ → Cast, save,
 | `tools/build_bank.py` | Builds `bank.json`: maps every question to a topic and estimates its difficulty |
 | `tools/make_icons.py`, `tools/make_techgates.py` | Generate the GateHub icons and the Tech Gates logo and lettering |
 | `tools/make_font.py`, `assets/fonts/` | Build the GateHub Display typeface (preview it in `tools/font-specimen.html`) |
+| `tools/make_banner.py` | Re-letters the wallpaper's GATE HUB in GateHub Display and exports the WebP/JPEG banner images |
+| `tools/optimize_images.py` | Shrinks the question figures in `data/img` |
 | `sw.js`, `manifest.webmanifest` | Offline support and app install |
 
 ## The team: Tech Gates

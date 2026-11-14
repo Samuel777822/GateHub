@@ -121,7 +121,8 @@
   function rich(src, fmt) {
     let h = fmt === "md" ? mdToHtml(src) : String(src ?? "");
     h = h.replace(/(src=["'])img\//g, "$1data/img/");
-    return window.DOMPurify ? DOMPurify.sanitize(h) : h;
+    const clean = window.DOMPurify ? DOMPurify.sanitize(h) : h;
+    return clean.replace(/<img(?![^>]*\bloading=)/g, '<img loading="lazy" decoding="async"');
   }
   function typeset(el, withDollar) {
     if (!window.renderMathInElement || !el) return;
@@ -802,9 +803,9 @@
 
   // ═══ ABOUT / TECH GATES ═════════════════════════════════
   const FOUNDERS = [
-    { name: "Pranav V Rao", role: "Co-founder & CEO", photo: "assets/team/pranav.jpg", gh: "pranavvrao1-ai",
+    { name: "Pranav V Rao", role: "Co-founder & CEO", photo: "assets/team/pranav.webp", gh: "pranavvrao1-ai",
       lines: ["AI & ML student", "Cyclist", "Interested in military and defence technology"] },
-    { name: "Abhay Samuel H", role: "Co-founder & CTO", photo: "assets/team/abhay.jpg", gh: "Samuel777822",
+    { name: "Abhay Samuel H", role: "Co-founder & CTO", photo: "assets/team/abhay.webp", gh: "Samuel777822",
       lines: ["Computer Science student at BMS College of Engineering, Bengaluru", "Trains in mixed martial arts (MMA)"] }
   ];
   function about() {
@@ -813,13 +814,13 @@
         <img class="about-lockup only-light" src="assets/techgates-lockup-ink.svg" alt="Tech Gates">
         <img class="about-lockup only-dark" src="assets/techgates-lockup-gold.svg" alt="Tech Gates">
         <p class="eyebrow" style="margin-top:18px">About us</p>
-        <h1 class="title">Built by students, for every GATE aspirant.</h1>
+        <h1 class="title">Built by students, for every GATE CS aspirant.</h1>
       </header>
       <div class="rule"><span></span>❦<span></span></div>
 
       <section class="about-why">
         <h2 class="sec">Why we built GateHub</h2>
-        <p>Preparing for GATE is scattered. Previous-year questions sit in one PDF, their solutions on a forum, the best lectures across a dozen playlists, and your progress lives only in your head. We wanted one calm place that brings all of it together.</p>
+        <p>Preparing for GATE CS is scattered. Previous-year questions sit in one PDF, their solutions on a forum, the best lectures across a dozen playlists, and your progress lives only in your head. We wanted one calm place that brings all of it together.</p>
         <p>So we built GateHub: every GATE CSE previous-year question sorted by subject, chapter and topic with a worked answer; the best university lectures mapped to the GATE syllabus lecture by lecture; timed tests that feel like the real exam; and honest analysis of where your time and marks go.</p>
         <p>It's free, it works on your phone and your laptop, and your progress stays on your own device.</p>
       </section>
