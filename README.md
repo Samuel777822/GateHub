@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">GateHub</h1>
-<p align="center"><b>A calm, complete place to prepare for GATE CS (Computer Science & IT).</b><br>Built by students, for every GATE CS aspirant. A project by <b>Tech Gates</b>.</p>
+<p align="center"><b>A calm, complete place to prepare for GATE CS (Computer Science & IT).</b><br>Built by engineering students, for every GATE CS aspirant. A project by <b>Tech Gates</b>.</p>
 
 <p align="center">
   <b><a href="https://samuel777822.github.io/GateHub/">Open GateHub →</a></b><br>
@@ -77,8 +77,8 @@ To install it as an app, open GateHub in Chrome and choose **⋮ → Cast, save,
 
 | | |
 |---|---|
-| **Pranav V Rao**, Co-founder & CEO | AI & ML student · cyclist · interested in military and defence technology · [@pranavvrao1-ai](https://github.com/pranavvrao1-ai) |
-| **Abhay Samuel H**, Co-founder & CTO | Computer Science student at BMS College of Engineering, Bengaluru · trains in MMA · [@Samuel777822](https://github.com/Samuel777822) |
+| **Pranav V Rao**, Co-founder & CEO | AI & ML engineering student · cyclist · interested in military and defence technology · [@pranavvrao1-ai](https://github.com/pranavvrao1-ai) |
+| **Abhay Samuel H**, Co-founder & CTO | Computer Science engineering student at BMS College of Engineering, Bengaluru · trains in MMA · complementarian Christian and a keen student of theology · [@Samuel777822](https://github.com/Samuel777822) |
 
 ## Credits
 

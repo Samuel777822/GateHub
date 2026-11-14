@@ -6,3 +6,6 @@ __pycache__/
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# share posters (kept out of the site)
+promo/

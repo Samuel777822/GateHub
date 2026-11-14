@@ -164,7 +164,7 @@
       { left: "\\(", right: "\\)", display: false }
     ];
     if (withDollar) delimiters.push({ left: "$", right: "$", display: false });
-    try { renderMathInElement(el, { delimiters, throwOnError: false, ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code", "option"] }); } catch {}
+    try { renderMathInElement(el, { delimiters, throwOnError: false, strict: "ignore", ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code", "option"] }); } catch {}
   }
   const plain = (src, fmt) => {
     const d = document.createElement("div");
@@ -294,6 +294,12 @@
       </section>
       <blockquote class="home-quote">“${esc(qt)}”<cite>${esc(qa)}</cite></blockquote>
       <p class="home-help"><a href="#/guide">New here? See how GateHub works</a><span>·</span><a href="#/review">Leave a review</a></p>
+      <a class="panel home-founders" href="#/about">
+        <div class="hf-text"><span class="eyebrow">About us</span><b>Meet the founders of Tech Gates</b>
+          <span class="small">Two engineering students building the GATE CS prep we wished we had.</span></div>
+        <div class="hf-people">${FOUNDERS.map((f) => `<div class="hf-p"><img src="${f.photo}" alt="" loading="lazy" decoding="async"><div><b>${esc(f.name)}</b><span>${esc(f.role)}</span><small>${esc(f.short)}</small></div></div>`).join("")}</div>
+        <span class="hf-go" aria-hidden="true">→</span>
+      </a>
 
       <section class="stats">
         <div><div class="v">${all.done}<small> / ${all.total}</small></div><div class="k">PYQs solved</div></div>
@@ -773,7 +779,7 @@
       <p class="lede">Links open in your normal Chrome window, so you stay signed in to GATE Wallah and Claude. Sign in once and Chrome remembers you.</p></header>
       <div class="rule"><span></span>❦<span></span></div>
       <div class="grid g2" style="margin-bottom:20px">
-        ${pw ? `<div class="panel"><div class="acct"><span class="seal">PW</span><div style="flex:1"><h3>GATE Wallah</h3><div class="small">Your batches, lectures and DPPs</div></div><a class="btn gold" href="${esc(pw.url)}" target="_blank" rel="noopener">Open ↗</a></div></div>` : ""}
+        ${pw ? `<div class="panel"><div class="acct"><span class="seal">PW</span><div style="flex:1"><h3>GATE Wallah</h3><div class="small">Opens your PW study page with your batches, lectures and DPPs. Signed out? PW asks you to log in first, then takes you there.</div></div><a class="btn gold" href="${esc(pw.url)}" target="_blank" rel="noopener">Open my batches ↗</a></div></div>` : ""}
         ${cl ? `<div class="panel"><div class="acct"><span class="seal claude-seal"><img class="claude-logo" src="assets/brand/claude-icon.png" alt=""></span><div style="flex:1"><h3>Claude</h3><div class="small">Your tutor for doubts and derivations</div></div><a class="btn gold" href="${esc(cl.url)}" target="_blank" rel="noopener">Open ↗</a></div></div>` : ""}
       </div>
       <div class="panel ask" style="margin-bottom:20px">
@@ -857,9 +863,12 @@
   // ═══ ABOUT / TECH GATES ═════════════════════════════════
   const FOUNDERS = [
     { name: "Pranav V Rao", role: "Co-founder & CEO", photo: "assets/team/pranav.webp", gh: "pranavvrao1-ai",
-      lines: ["AI & ML student", "Cyclist", "Interested in military and defence technology"] },
+      short: "AI & ML engineering student · cyclist",
+      lines: ["AI & ML engineering student", "Cyclist", "Interested in military and defence technology"] },
     { name: "Abhay Samuel H", role: "Co-founder & CTO", photo: "assets/team/abhay.webp", gh: "Samuel777822",
-      lines: ["Computer Science student at BMS College of Engineering, Bengaluru", "Trains in mixed martial arts (MMA)"] }
+      short: "CSE engineering student · MMA · complementarian Christian",
+      lines: ["Computer Science engineering student at BMS College of Engineering, Bengaluru", "Trains in mixed martial arts (MMA)",
+        "Complementarian Christian and a keen student of theology alongside engineering"] }
   ];
   function about() {
     paint(`
@@ -867,7 +876,7 @@
         <img class="about-lockup only-light" src="assets/techgates-lockup-ink.svg" alt="Tech Gates">
         <img class="about-lockup only-dark" src="assets/techgates-lockup-gold.svg" alt="Tech Gates">
         <p class="eyebrow" style="margin-top:18px">About us</p>
-        <h1 class="title">Built by students, for every GATE CS aspirant.</h1>
+        <h1 class="title">Built by engineering students, for every GATE CS aspirant.</h1>
       </header>
       <div class="rule"><span></span>❦<span></span></div>
 

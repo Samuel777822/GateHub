@@ -1,5 +1,5 @@
 // GateHub service worker — lets the app open even when the local server is off.
-const VERSION = "gh-v15";
+const VERSION = "gh-v16";
 const DATA = "gh-data-v1";   // question files; kept across app updates
 const SHELL = [
   "./", "index.html", "config.js", "css/app.css", "js/app.js", "js/fx.js", "js/content.js", "js/tests.js", "js/practice.js", "js/guide.js", "js/learn.js", "assets/brand/claude-icon.png",
@@ -52,7 +52,7 @@ self.addEventListener("fetch", (e) => {
   }
   // App files: network-first so edits show up, cache as fallback
   e.respondWith(fetch(req).then((res) => {
-    if (res.ok) caches.open(VERSION).then((c) => c.put(req, res.clone()));
+    if (res.ok) { const copy = res.clone(); caches.open(VERSION).then((c) => c.put(req, copy)); }
     return res;
   }).catch(() => caches.match(req, { ignoreSearch: true }).then((r) => r || caches.match("index.html"))));
 });
